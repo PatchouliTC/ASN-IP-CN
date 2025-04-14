@@ -14,7 +14,7 @@ def zip_dir(path_with_filename:Path,work_dir:Path,comment:str=None)->None:
     output = str(path_with_filename.absolute())
     with zipfile.ZipFile(output, "w") as zip:
         if comment:
-            zip.comment = comment
+            zip.comment = comment.encode('utf-8')
         for f in work_dir.iterdir():
             _scan_dir(zip, f, work_dir)
 

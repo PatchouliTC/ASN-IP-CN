@@ -18,8 +18,9 @@ source='https://whois.ipip.net/iso/CN'
 
 def process()->bool:
     pre_check(file_name)
-    WriteHeader(file_name, file_type, LOCAL_TIME, 
-                [f"// FROM:{source} \n","// Format: ASN //FULLNAME [IPv4-count,IPv6-count]\n"])
+    header_extra_data=[f"// FROM:{source} \n",
+                       "// Format: ASN //FULLNAME [IPv4-count,IPv6-count] \n"
+                       ]
     code,data=get_url_data(source,5)
     if code!=200:
         return False
@@ -34,5 +35,7 @@ def process()->bool:
     if len(write_data)==0:
         print('receive empty,may be ipip web style changed?')
         return False
+    header_extra_data.append(f"// Total {len(write_data)} records \n")
+    WriteHeader(file_name, file_type, LOCAL_TIME, header_extra_data)
     WriteBody(file_name,write_data)
     return True

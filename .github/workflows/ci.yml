@@ -45,36 +45,18 @@ jobs:
 
       - name: Create release
         if: steps.generate.outputs.generate_result == 'success'
-        id: create_release
-        uses: comnoco/create-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: meeDamian/github-release@2.0
         with:
-          tag_name: ${{ steps.date.outputs.date }}
-          release_name: ASN-IP-Data-${{ steps.date.outputs.date }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.date.outputs.date }}
+          name: ASN-IP-Data-${{ steps.date.outputs.date }}
+          draft: false
+          allow_override: true
           body: |
             [${{ steps.date.outputs.date }}] auto generated ASN and IP list result.
             download url:https://github.com/${{ github.repository }}/releases/download/${{ steps.date.outputs.date }}/${{ steps.generate.outputs.release_file }}
-          draft: true
-          prerelease: false
-
-      - name: Upload release asset
-        if: steps.generate.outputs.generate_result == 'success'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.create_release.outputs.tag_name }}
-          file: ${{ steps.generate.outputs.release_file_path }}
-          asset_name: ${{ steps.generate.outputs.release_file }}
-          overwrite: true
-
-      - name: Publish release
-        if: steps.generate.outputs.generate_result == 'success'
-        uses: StuYarrow/publish-release@v1.1.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          id: ${{ steps.create_release.outputs.id }}
+          gzip: false
+          files: ${{ steps.generate.outputs.release_file_path }}
 
       - name: Delete old releases and workflows
         uses: ophub/delete-releases-workflows@main

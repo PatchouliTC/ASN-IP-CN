@@ -63,9 +63,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.generate.outputs.release_file_path}}
-          asset_name: ${{ steps.generate.outputs.release_file}}
-          asset_content_type: ${{ steps.generate.outputs.release_file_content_type}}
+          asset_path: ${{ steps.generate.outputs.release_file_path }}
+          asset_name: ${{ steps.generate.outputs.release_file }}
+          asset_content_type: ${{ steps.generate.outputs.release_file_content_type }}
 
       - name: Publish release
         if: steps.generate.outputs.generate_result == 'success'

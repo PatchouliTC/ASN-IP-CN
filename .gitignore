@@ -6,3 +6,5 @@ __pycache__
 /scripts/script_resault/*
 .idea/
 *.iml
+output
+*.zip

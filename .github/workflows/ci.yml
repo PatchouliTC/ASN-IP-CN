@@ -54,6 +54,7 @@ jobs:
           release_name: ASN-IP-Data-${{ steps.date.outputs.date }}
           body: |
             [${{ steps.date.outputs.date }}] auto generated ASN and IP list result.
+            download url:https://github.com/${{ github.repository }}/releases/download/${{ steps.date.outputs.date }}/${{ steps.generate.outputs.release_file }}
           draft: true
           prerelease: false
 

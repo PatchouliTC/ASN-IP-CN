@@ -10,6 +10,9 @@ file_name=gen_data_storage_path('ASN.IPIP.China.list')
 file_type='ASN'
 source='https://whois.ipip.net/iso/CN'
 
-def process():
+def process()->bool:
     pre_check(file_name)
     WriteHeader(file_name, file_type, LOCAL_TIME)
+    
+    
+    return True

@@ -60,7 +60,7 @@ def WriteHeader(file_name:str,file_type:str,write_at:datetime):
     with open(file_name, "w+" ,encoding='utf-8') as fs:
         fs.write(f'// DataType:{file_type} \n')
         fs.write(f"// {file_type} Information in China. (https://github.com/{REPO_NAME}) \n")
-        fs.write(f"// Last Updated: {write_at} \n")
+        fs.write(f"// Last Updated: {write_at} \n\n")
 
 def WriteBody(file_name:str,data:list[str]):
     with open(file_name, "a+" ,encoding='utf-8') as fs:

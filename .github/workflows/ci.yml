@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 10 * * *" # Every day at 10:00 UTC->2:00 +0800 CST
 
 jobs:
   build: 

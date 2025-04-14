@@ -28,8 +28,8 @@ def process()->bool:
     write_data=[]
     for i, row in enumerate(all_rows):
         cells = row.xpath('./td | ./td/a')
-        # if len(cells) != 5:
-        #     continue
+        if len(cells) != 5:
+            continue
         cell_texts = [cell.text.strip() if cell.text else "" for cell in cells]
         write_data.append(f"{cell_texts[1].replace('AS','')} //{cell_texts[2]} [{cell_texts[3].replace(',','')},{cell_texts[4].replace(',','')}]\n")
     if len(write_data)==0:

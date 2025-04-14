@@ -1,0 +1,8 @@
+venv*.zip
+venv
+__pycache__
+*.pyproj
+*.pyc
+/scripts/script_resault/*
+.idea/
+*.iml

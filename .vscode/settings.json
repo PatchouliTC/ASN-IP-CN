@@ -1,0 +1,22 @@
+{
+    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "env": true,
+        "venv": true,
+        "**/*.pyproj":true,
+        ".gitignore":true,
+        "custom_airtest":true
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "env": true,
+        "venv": true,
+        "**/*.pyproj":true,
+        ".gitignore":false,
+        "custom_airtest":true
+    },
+    "python.linting.pylamaEnabled": false
+}

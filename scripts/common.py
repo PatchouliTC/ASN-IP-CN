@@ -6,6 +6,7 @@ from pathlib import Path
 import uuid
 import zipfile
 from scripts.enum import *
+from typing import List
 
 def zip_dir(path_with_filename:Path,work_dir:Path,comment:str=None)->None:
     if path_with_filename.suffix is None or path_with_filename.suffix != '.zip':
@@ -62,11 +63,11 @@ def WriteHeader(file_name:str,file_type:str,write_at:datetime):
         fs.write(f"// {file_type} Information in China. (https://github.com/{REPO_NAME}) \n")
         fs.write(f"// Last Updated: {write_at} \n\n")
 
-def WriteBody(file_name:str,data:list[str]):
+def WriteBody(file_name:str,data:List[str]):
     with open(file_name, "a+" ,encoding='utf-8') as fs:
         fs.writelines(data)
 
-def WriteEnd(file_name:str,data:list[str]):
+def WriteEnd(file_name:str,data:List[str]):
     with open(file_name, "a+" ,encoding='utf-8') as fs:
         fs.writelines(data)
 

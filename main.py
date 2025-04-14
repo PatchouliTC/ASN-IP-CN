@@ -1,6 +1,8 @@
 import os
 import importlib
 import inspect
+from scripts.common import get_output_locate,set_singleline_output,set_multiline_output,pre_check,gen_data_storage_path
+from scripts.enum import *
 
 def run_all_processes(package_name, function_name):
     """
@@ -42,5 +44,14 @@ def run_all_processes(package_name, function_name):
             except Exception as e:
                 print(f"执行 {module_name}.{function_name}() 时发生错误: {e}")
 
+
+
 if __name__ == "__main__":
+    output_locate=get_output_locate()
+    set_singleline_output('generate_result','failure')
+    set_singleline_output('output_path',output_locate)
+    set_singleline_output('release_file',FINAL_RELEASE_FILE_NAME)
+    set_singleline_output('release_file_path',gen_data_storage_path(FINAL_RELEASE_FILE_NAME))
+    set_singleline_output('release_file_content_type',ASSET_CONTENT_TYPE)
+    pre_check(output_locate)
     run_all_processes('scripts.asn', 'process')

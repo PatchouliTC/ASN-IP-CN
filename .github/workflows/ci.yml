@@ -16,7 +16,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
@@ -46,7 +46,7 @@ jobs:
       - name: Create release
         if: steps.generate.outputs.generate_result == 'success'
         id: create_release
-        uses: actions/create-release@v1
+        uses: comnoco/create-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -60,14 +60,13 @@ jobs:
 
       - name: Upload release asset
         if: steps.generate.outputs.generate_result == 'success'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: svenstaro/upload-release-action@v2
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.generate.outputs.release_file_path }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.create_release.outputs.tag_name }}
+          file: ${{ steps.generate.outputs.release_file_path }}
           asset_name: ${{ steps.generate.outputs.release_file }}
-          asset_content_type: ${{ steps.generate.outputs.release_file_content_type }}
+          overwrite: true
 
       - name: Publish release
         if: steps.generate.outputs.generate_result == 'success'

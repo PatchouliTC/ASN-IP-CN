@@ -53,7 +53,6 @@ if __name__ == "__main__":
     set_singleline_output('output_path',release_locate)
     set_singleline_output('release_file',FINAL_RELEASE_FILE_NAME)
     set_singleline_output('release_file_path',final_file) #include filename
-    set_singleline_output('release_file_content_type',ASSET_CONTENT_TYPE)
     pre_check(final_file)
     pre_check(get_output_locate())
     run_all_processes('scripts.asn', 'process')

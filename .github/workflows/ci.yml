@@ -32,17 +32,18 @@ jobs:
         run: |
           python main.py
 
-      - name: Check generate result
-        run: |
-            if [[ "${{ steps.generate.outputs.generate_result }}" == "success" ]];
-            then
-              echo "Data Generate Success, start release process."
-            else 
-              echo "Data Generate Failed, please check the log."
-              exit 1
-            fi
+      # - name: Check generate result
+      #   run: |
+      #       if [[ "${{ steps.generate.outputs.generate_result }}" == "success" ]];
+      #       then
+      #         echo "Data Generate Success, start release process."
+      #       else 
+      #         echo "Data Generate Failed, please check the log."
+      #         exit 1
+      #       fi
 
       - name: Create release
+        if: steps.generate.outputs.generate_result == 'success'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -56,6 +57,7 @@ jobs:
           prerelease: false
 
       - name: Upload release asset
+        if: steps.generate.outputs.generate_result == 'success'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,6 +68,7 @@ jobs:
           asset_content_type: ${{ steps.generate.outputs.release_file_content_type}}
 
       - name: Publish release
+        if: steps.generate.outputs.generate_result == 'success'
         uses: StuYarrow/publish-release@v1.1.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

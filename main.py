@@ -66,14 +66,25 @@ def set_configuration_for_workflow():
 if __name__ == "__main__":
     release_locate=CURRENT_ROOT_PATH
     final_file=release_locate.joinpath(FINAL_RELEASE_FILE_NAME)
-    
+    # from lxml import etree
+    # text=''
+    # with open('ipip.html','r',encoding='utf-8') as f:
+    #     text=f.read()
+    # data=etree.HTML(text)
+    # all_rows = data.xpath('//table//tr')
+    # for i, row in enumerate(all_rows):
+    #     cells = row.xpath('./td | ./td/a')
+    #     cell_texts = [cell.text.strip() if cell.text else "" for cell in cells]
+    #     if len(cell_texts) == 0:
+    #         continue
+    #     print(f"第{i+1}行: {' | '.join(cell_texts)}")
     set_failure()
-    set_configuration_for_workflow
+    set_configuration_for_workflow()
     
     pre_check(final_file)
     pre_check(get_output_locate())
     
     run_all_processes('scripts.asn', 'process')
     
-    zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
-    set_success()
+    # # zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
+    # set_success()

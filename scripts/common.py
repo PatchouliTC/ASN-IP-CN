@@ -1,6 +1,7 @@
 import requests
 from lxml import etree
 from datetime import datetime, timezone
+import time
 import os
 from pathlib import Path
 import uuid
@@ -57,11 +58,15 @@ def pre_check(file_name:Path):
     directory = file_name.resolve().parent
     os.makedirs(directory, exist_ok=True)
     
-def WriteHeader(file_name:str,file_type:str,write_at:datetime):
+def WriteHeader(file_name:str,file_type:str,write_at:datetime,extra_lines:List[str]=None):
     with open(file_name, "w+" ,encoding='utf-8') as fs:
         fs.write(f'// DataType:{file_type} \n')
         fs.write(f"// {file_type} Information in China. (https://github.com/{REPO_NAME}) \n")
-        fs.write(f"// Last Updated: {write_at} \n\n")
+        fs.write(f"// Last Updated: {write_at} \n")
+        fs.write(f"// Made by {REPO_AUTHOR}, All rights reserved. \n")
+        if extra_lines:
+            fs.writelines(extra_lines)
+        fs.write('\n\n')
 
 def WriteBody(file_name:str,data:List[str]):
     with open(file_name, "a+" ,encoding='utf-8') as fs:
@@ -71,33 +76,42 @@ def WriteEnd(file_name:str,data:List[str]):
     with open(file_name, "a+" ,encoding='utf-8') as fs:
         fs.writelines(data)
 
-def get_url_data(url:str):
+def get_url_data(url:str,retry_times:int=1):
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
     }
-    try:
-        response = requests.get(url = url, headers = headers,timeout=120)
-        if response.status_code != 200:
-            print(f"Target unreachable({response.status_code})")
-            return response.status_code,None
-        with open(gen_data_storage_path("ipip.html"), "w",encoding='utf-8') as f:
-            f.write(response.text)
-        parse_result=etree.HTML(response.text)
-        return 200,parse_result
-    except requests.ConnectTimeout as e:
-        print(f"Target unreachable(timeout 30s)")
-        return 500,None
-    except requests.ConnectionError as e:
-        print(f"Target unreachable[ConnectionError]({e})")
-        return 500,None
-    except requests.RequestException as e:
-        print(f"Target unreachable[RequestException]({e.errno})")
-        return 500,None
-    except requests.HTTPError as e:
-        print(f"Target unreachable[HTTPError]({e.errno})")
-        return 500,None
-    except Exception as e:
-        print(f"Target unreachable({e})")
-        return 500,None
-    
+    call_times=0
+    code=0
+    result=None
+    while(call_times<retry_times):
+        print(f"Connection to {url}[{call_times} try]...")
+        call_times+=1
+        try:
+            response = requests.get(url = url, headers = headers,timeout=60)
+            if response.status_code != 200:
+                print(f"Target unreachable({response.status_code})")
+                code=response.status_code
+            # with open(gen_data_storage_path("ipip.html"), "w",encoding='utf-8') as f:
+            #     f.write(response.text)
+            parse_result=etree.HTML(response.text)
+            code=response.status_code
+            result=parse_result
+            break
+        except requests.ConnectTimeout as e:
+            print(f"Target unreachable(timeout 30s)")
+            code=500
+        except requests.ConnectionError as e:
+            print(f"Target unreachable[ConnectionError]({e})")
+            code=500
+        except requests.RequestException as e:
+            print(f"Target unreachable[RequestException]({e.errno})")
+            code=500
+        except requests.HTTPError as e:
+            print(f"Target unreachable[HTTPError]({e.errno})")
+            code=500
+        except Exception as e:
+            print(f"Target unreachable({e})")
+            code=500
+        time.sleep(3)
+    return code,result
         

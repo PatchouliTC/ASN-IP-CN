@@ -86,5 +86,5 @@ if __name__ == "__main__":
     
     run_all_processes('scripts.asn', 'process')
     
-    zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
+    # zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
     set_success()

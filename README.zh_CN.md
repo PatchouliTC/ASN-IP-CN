@@ -15,3 +15,8 @@
 ### IP数据来源
 - [cbuijs/ipasn](https://github.com/cbuijs/ipasn)
 - [ipverse/asn-ip](https://github.com/ipverse/asn-ip)
+
+## 脚本相关
+- 基于python3
+- 需求库`pip install requests lxml`
+- 根目录执行`python main.py`

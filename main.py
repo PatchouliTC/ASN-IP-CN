@@ -1,10 +1,10 @@
 import os
 import importlib
 import inspect
-from scripts.common import get_output_locate,set_singleline_output,set_multiline_output,pre_check,gen_data_storage_path,zip_dir
+from scripts.common import get_output_locate, get_url_data,set_singleline_output,set_multiline_output,pre_check,gen_data_storage_path,zip_dir
 from scripts.enum import *
 
-def run_all_processes(package_name, function_name):
+def run_all_processes(package_name, function_name,limit_module_name=None):
     """
     导入指定包下所有模块，检查是否存在特定函数名，如果存在则依次执行。
     
@@ -29,6 +29,8 @@ def run_all_processes(package_name, function_name):
             filename.suffix != '.py' or
             len(filename.suffixes)!=1 or
             filename.name.startswith('__')):
+            continue
+        if limit_module_name and filename.stem != limit_module_name:
             continue
         module_name = f'{package_name}.{filename.stem}'         
         try:
@@ -66,9 +68,7 @@ def set_configuration_for_workflow():
 if __name__ == "__main__":
     release_locate=CURRENT_ROOT_PATH
     final_file=release_locate.joinpath(FINAL_RELEASE_FILE_NAME)
-    import requests
-    resp=requests.get('https://search.dnslytics.com/bgp/cn')
-    pass
+
     # from lxml import etree
     # text=''
     # with open('ipip.html','r',encoding='utf-8') as f:
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     pre_check(final_file)
     pre_check(get_output_locate())
     
-    run_all_processes('scripts.asn', 'process')
+    run_all_processes('scripts.asn', 'process','potaroo')
     
     zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
     set_success()

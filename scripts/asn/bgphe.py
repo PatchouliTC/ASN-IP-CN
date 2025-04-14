@@ -35,7 +35,7 @@ def process()->bool:
         if len(cells) != 7:
             continue
         cell_texts = [cell.text.strip() if cell.text else "" for cell in cells]
-        write_data.append(f"{cell_texts[1]} //{cell_texts[2]}, CN [{cell_texts[3].replace(',','')},{cell_texts[4].replace(',','')}]<{cell_texts[5].replace(',','')},{cell_texts[6].replace(',','')}>\n")
+        write_data.append(f"{cell_texts[1].replace('AS','')} //{cell_texts[2]}, CN [{cell_texts[3].replace(',','')},{cell_texts[4].replace(',','')}]<{cell_texts[5].replace(',','')},{cell_texts[6].replace(',','')}>\n")
     if len(write_data)==0:
         print('receive empty,may be ipip web style changed?')
         return False

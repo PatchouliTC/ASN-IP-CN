@@ -66,6 +66,9 @@ def set_configuration_for_workflow():
 if __name__ == "__main__":
     release_locate=CURRENT_ROOT_PATH
     final_file=release_locate.joinpath(FINAL_RELEASE_FILE_NAME)
+    import requests
+    resp=requests.get('https://search.dnslytics.com/bgp/cn')
+    pass
     # from lxml import etree
     # text=''
     # with open('ipip.html','r',encoding='utf-8') as f:
@@ -86,5 +89,5 @@ if __name__ == "__main__":
     
     run_all_processes('scripts.asn', 'process')
     
-    # zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
+    zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
     set_success()

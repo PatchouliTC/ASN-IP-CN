@@ -84,8 +84,8 @@ def get_url_data(url:str,retry_times:int=1):
     code=0
     result=None
     while(call_times<retry_times):
-        print(f"Connection to {url}[{call_times} try]...")
         call_times+=1
+        print(f"Connection to {url}[{call_times} try]...")
         try:
             response = requests.get(url = url, headers = headers,timeout=60)
             if response.status_code != 200:

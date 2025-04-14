@@ -1,8 +1,8 @@
 # version :Python 3.7.3
 import os
 import re
-import urllib.error
-import urllib.request
+import time
+import requests
 
 file_name = 'asn_cn.conf'
 define_line = 'define china_asn = ['
@@ -10,20 +10,48 @@ end_line = '];'
 # data_source = 'https://whois.ipip.net/countries/CN'
 data_source = 'https://whois.ipip.net/iso/CN'
 
-try:
+def get_url_data(url:str,retry_times:int=1):
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
     }
-    response = urllib.request.urlopen(data_source,timeout=30,headers=headers)
-except urllib.error.HTTPError as e:
-    print("HTTPError: ", e.code)
-    print(f"IPIP不可达({e.code})")
+    call_times=0
+    code=0
+    result=None
+    while(call_times<retry_times):
+        call_times+=1
+        print(f"Connection to {url}[{call_times} try]...")
+        try:
+            response = requests.get(url = url, headers = headers,timeout=60)
+            if response.status_code != 200:
+                print(f"Target unreachable({response.status_code})")
+                code=response.status_code
+            code=response.status_code
+            result=response.text
+            break
+        except requests.ConnectTimeout as e:
+            print(f"Target unreachable(timeout 30s)")
+            code=500
+        except requests.ConnectionError as e:
+            print(f"Target unreachable[ConnectionError]({e})")
+            code=500
+        except requests.RequestException as e:
+            print(f"Target unreachable[RequestException]({e.errno})")
+            code=500
+        except requests.HTTPError as e:
+            print(f"Target unreachable[HTTPError]({e.errno})")
+            code=500
+        except Exception as e:
+            print(f"Target unreachable({e})")
+            code=500
+        time.sleep(3)
+    return code,result
+
+code,result=get_url_data(data_source,3)
+if code !=200:
+    print(f"数据获取失败，错误代码：{code}")
     exit(1)
-if response.getcode() != 200:
-    print("获取数据失败，请检查网络连接或URL是否正确")
-    exit(1)
-    
-html = response.read().decode('utf-8')
+
+html = result
 print("数据获取成功，正在解析数据...")
 data=re.findall(', CN\">AS(.*?)</a> </td>', html, re.S)
 cn_asn_codes = [i for i in data]

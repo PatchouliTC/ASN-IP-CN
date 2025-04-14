@@ -12,7 +12,6 @@ def run_all_processes(package_name, function_name,limit_module_name=None):
         package_name: 包的导入路径，例如 'scripts.asn'
         function_name: 要查找并执行的函数名，例如 'process'
     """
-    # 获取包的物理路径
     try:
         package = importlib.import_module(package_name)
         package_path = Path(str(package.__path__._path[0]))
@@ -22,7 +21,6 @@ def run_all_processes(package_name, function_name,limit_module_name=None):
     
     print(f"Checking {package_name} package modules...")
     exec_result=[]
-    # 遍历包目录下的所有Python文件
     for filename in package_path.iterdir():
         if (not filename.is_file() or 
             not filename.suffix or 
@@ -30,14 +28,11 @@ def run_all_processes(package_name, function_name,limit_module_name=None):
             len(filename.suffixes)!=1 or
             filename.name.startswith('__')):
             continue
-        if limit_module_name and filename.stem != limit_module_name:
+        if limit_module_name is not None and filename.stem != limit_module_name:
             continue
         module_name = f'{package_name}.{filename.stem}'         
         try:
-            # 导入模块
             module = importlib.import_module(module_name)
-            
-            # 检查模块是否有指定函数名
             if hasattr(module, function_name):
                 func = getattr(module, function_name)
                 execute_result=False
@@ -87,7 +82,7 @@ if __name__ == "__main__":
     pre_check(final_file)
     pre_check(get_output_locate())
     
-    run_all_processes('scripts.asn', 'process','potaroo')
+    run_all_processes('scripts.asn', 'process')
     
     zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
     set_success()

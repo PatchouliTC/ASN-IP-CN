@@ -114,4 +114,41 @@ def get_url_data(url:str,retry_times:int=1):
             code=500
         time.sleep(3)
     return code,result
+
+
+def write_dir_all_asn_to_bird_conf(dir_path:Path):
+    if dir_path is None or not dir_path.exists() or not dir_path.is_dir():
+        print('dir_path not exist or not a directory')
+        return
+    file_name = 'asn_cn.conf'
+    str_start = 'define china_asn = [\n'
+    str_end = '];'
+    with open(dir_path.joinpath(file_name), 'w',encoding='utf-8') as file:
+        file.writelines(str_start)
+        asn_ids=[]
+        def __write_asn_list_to_file(asn_ids:list,file_path:Path):
+            if file_path.is_file() and file_path.suffix == '.list':
+                with open(file_path, 'r') as f:
+                    for line in f:
+                        line=line.strip()
+                        if line=='' or line.startswith('//'):
+                            continue
+                        asn=line.split(' ')[0].strip()
+                        if asn.isdigit():
+                            asn_ids.append(str(asn)+",\n")
+                
+        def __write_asn_to_file(asn_ids:list,file_path:Path):
+            if file_path.is_file():
+                __write_asn_list_to_file(asn_ids,file_path)
+            elif file_path.is_dir():
+                for f in file_path.iterdir():
+                    __write_asn_to_file(asn_ids,f)
+            else:
+                pass
+        __write_asn_to_file(asn_ids,dir_path)
         
+        asn_ids=list(set(asn_ids))
+        if asn_ids:
+            asn_ids[-1] = asn_ids[-1].rstrip(',\n') + '\n'
+        file.writelines((asn_ids))
+        file.writelines(str_end)

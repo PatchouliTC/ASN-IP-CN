@@ -1,7 +1,7 @@
 import os
 import importlib
 import inspect
-from scripts.common import get_output_locate, get_url_data,set_singleline_output,set_multiline_output,pre_check,gen_data_storage_path,zip_dir
+from scripts.common import get_output_locate, get_url_data,set_singleline_output,set_multiline_output,pre_check,gen_data_storage_path, write_dir_all_asn_to_bird_conf,zip_dir
 from scripts.enum import *
 
 def run_all_processes(package_name, function_name,limit_module_name=None):
@@ -83,6 +83,8 @@ if __name__ == "__main__":
     pre_check(get_output_locate())
     
     run_all_processes('scripts.asn', 'process')
+    
+    write_dir_all_asn_to_bird_conf(get_output_locate())
     
     zip_dir(final_file,get_output_locate(),comment=f'Generate At {LOCAL_TIME}')
     set_success()

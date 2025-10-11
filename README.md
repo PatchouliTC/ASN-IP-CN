@@ -4,7 +4,7 @@ ASN and IP List in China (Auto Update)(with other tools)
 [简体中文](./README.zh_CN.md)
 
 ## Features
-- Automatic daily updates(by github workflow)
+~~- Automatic daily updates(by github workflow)~~
 - Reliable and accurate source
 - More config...
 
@@ -21,3 +21,6 @@ ASN and IP List in China (Auto Update)(with other tools)
 - base python3
 - require `pip install requests lxml`
 - run in current folder`python main.py`
+
+## Download
+https://github.com/PatchouliTC/ASN-IP-CN/releases/latest/ASN-IP-Data.zip

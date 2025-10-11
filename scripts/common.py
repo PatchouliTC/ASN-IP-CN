@@ -135,7 +135,7 @@ def write_dir_all_asn_to_bird_conf(dir_path:Path):
                             continue
                         asn=line.split(' ')[0].strip()
                         if asn.isdigit():
-                            asn_ids.append(str(asn)+",\n")
+                            asn_ids.append("    "+str(asn)+",\n")
                 
         def __write_asn_to_file(asn_ids:list,file_path:Path):
             if file_path.is_file():

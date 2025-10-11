@@ -1,0 +1,11 @@
+# 定时任务：每日凌晨1点自动执行脚本
+# 请将以下内容添加到 crontab（Linux/macOS），或使用 Windows 任务计划程序
+# Linux/macOS 示例：
+# 0 1 * * * /bin/bash /path/to/download_update.sh
+
+# Windows 用户可参考如下 PowerShell 命令创建计划任务：
+# $action = New-ScheduledTaskAction -Execute "/bin/bash" -Argument "/path/to/download_update.sh"
+# $trigger = New-ScheduledTaskTrigger -Daily -At 1am
+# Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "ASN-IP-Data-Update"
+
+# 详细说明请见 README.md
